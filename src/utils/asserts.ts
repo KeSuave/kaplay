@@ -18,3 +18,9 @@ export function isClass(obj: any): obj is Function {
         && Object.getOwnPropertyDescriptor(obj.prototype, "constructor")
             !== undefined;
 }
+
+export function assert(condition: unknown, message: string = "Assertion failed"): asserts condition {
+    if (!condition) {
+        throw new Error(message);
+    }
+}

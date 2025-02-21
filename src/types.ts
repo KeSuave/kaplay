@@ -47,6 +47,8 @@ import type {
     FollowComp,
     HealthComp,
     LayerComp,
+    LevelComp,
+    LevelOpt,
     LifespanCompOpt,
     MaskComp,
     NamedComp,
@@ -100,7 +102,6 @@ import type {
     GameObjEventNames,
     GameObjEvents,
     KeepFlags,
-    LevelOpt,
     SceneDef,
     SceneName,
     SetParentOpt,
@@ -5026,7 +5027,7 @@ export interface KAPLAYCtx<
      * @since v2000.0
      * @group Level
      */
-    addLevel(map: string[], opt: LevelOpt): GameObj;
+    addLevel(map: string[], opt: LevelOpt): GameObj<PosComp | LevelComp>;
     /**
      * Get data from local storage, if not present can set to a default value.
      *
@@ -7057,82 +7058,6 @@ export enum EdgeMask {
     RightVertical = 14,
     All = 15,
 }
-
-/**
- * A level component.
- *
- * @group Component Types
- */
-export interface LevelComp extends Comp {
-    tileWidth(): number;
-    tileHeight(): number;
-    numRows(): number;
-    numColumns(): number;
-    /**
-     * Spawn a tile from a symbol defined previously.
-     */
-    spawn(sym: string, p: Vec2): GameObj | null;
-    spawn(sym: string, x: number, y: number): GameObj | null;
-    /**
-     * Spawn a tile from a component list.
-     *
-     * @returns The spawned game object, or null if the obj hasn't components.
-     */
-    spawn<T>(obj: CompList<T>, p: Vec2): GameObj<T> | null;
-    spawn<T>(sym: CompList<T>, x: number, y: number): GameObj<T> | null;
-    /**
-     * Total width of level in pixels.
-     */
-    levelWidth(): number;
-    /**
-     * Total height of level in pixels.
-     */
-    levelHeight(): number;
-    /**
-     * Get all game objects that's currently inside a given tile.
-     */
-    getAt(tilePos: Vec2): GameObj[];
-    /**
-     * Raycast all game objects on the given path.
-     */
-    raycast(origin: Vec2, direction: Vec2): RaycastResult;
-    /**
-     * Convert tile position to pixel position.
-     */
-    tile2Pos(tilePos: Vec2): Vec2;
-    tile2Pos(x: number, y: number): Vec2;
-    /**
-     * Convert pixel position to tile position.
-     */
-    pos2Tile(pos: Vec2): Vec2;
-    pos2Tile(x: number, y: number): Vec2;
-    /**
-     * Find the path to navigate from one tile to another tile.
-     *
-     * @returns A list of traverse points in tile positions.
-     */
-    getTilePath(from: Vec2, to: Vec2, opts?: PathFindOpt): Vec2[] | null;
-    /**
-     * Find the path to navigate from one tile to another tile.
-     *
-     * @returns A list of traverse points in pixel positions.
-     */
-    getPath(from: Vec2, to: Vec2, opts?: PathFindOpt): Vec2[] | null;
-    getSpatialMap(): GameObj[][];
-    removeFromSpatialMap(obj: GameObj): void;
-    insertIntoSpatialMap(obj: GameObj): void;
-    onSpatialMapChanged(cb: () => void): KEventController;
-    onNavigationMapInvalid(cb: () => void): KEventController;
-    invalidateNavigationMap(): void;
-    onNavigationMapChanged(cb: () => void): KEventController;
-}
-
-/**
- * @group Options
- */
-export type PathFindOpt = {
-    allowDiagonals?: boolean;
-};
 
 /**
  * The list of easing functions available.
