@@ -258,7 +258,8 @@ export function area(opt: AreaCompOpt = {}): AreaComp {
             _k.game.areaCount++;
             if (this.area.cursor) {
                 events.push(
-                    this.onHover(() => _k.app.setCursor(this.area.cursor!)),
+                    this.onHoverUpdate(() => _k.app.setCursor(this.area.cursor!)),
+                    this.onHoverEnd(() => _k.app.setCursor("default")),
                 );
             }
 
